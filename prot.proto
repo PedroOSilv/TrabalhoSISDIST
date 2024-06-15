@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package filetransfer;
+
+service FileService {
+  rpc UploadFile(stream FileChunk) returns (UploadStatus);
+  rpc DownloadFile(FileRequest) returns (stream FileChunk);
+}
+
+message FileChunk {
+  bytes content = 1;
+  string filename = 2; // filename is sent with the first chunk only
+}
+
+message UploadStatus {
+  bool success = 1;
+  string message = 2;
+}
+
+message FileRequest {
+  string filename = 1;
+}
