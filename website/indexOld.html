@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node-Python App</title>
+</head>
+<body>
+    <h1>Node-Python Integration</h1>
+    <button id="run-python-btn">Run Python Script</button>
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('run-python-btn').addEventListener('click', () => {
+            fetch('/run-python')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('output').innerText = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('output').innerText = 'Error: ' + error;
+                });
+        });
+    </script>
+</body>
+</html>
