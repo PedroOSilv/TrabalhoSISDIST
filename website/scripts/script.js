@@ -74,26 +74,49 @@ document.addEventListener("DOMContentLoaded", function () {
     var keys = Object.keys(sessionStorage);
 
     for (const file of files) {
-      if (keys.length >0 ){
-        var cont = 0;
-        for (const key of keys) {
-          if (file.name == key) {
-            openModalWithMessage("Arquivo já carregado");
-            console.log("Arquivo já carregado");
-            cont++;
-          }
-        }
-        //se ele verificar todos os arquivos e não encontrar o arquivo ele carrega
-        if (cont == 0) {
-          console.log("Arquivo: " + file.name);
-          await handleFile(file);
-        }
-      }else{
-        console.log("Arquivo: " + file.name);
-        await handleFile(file);
-      }
+        // Cria um FormData para enviar o arquivo
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Envia o arquivo via Fetch para o servidor
+        fetch('/upload', {
+            method: 'POST',
+            body: file
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Erro ao enviar arquivo');
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Resposta do servidor:', data);
+            alert('Arquivo enviado com sucesso!');
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao enviar arquivo');
+        });
+
+    //   if (keys.length >0 ){
+    //     var cont = 0;
+    //     for (const key of keys) {
+    //       if (file.name == key) {
+    //         openModalWithMessage("Arquivo já carregado");
+    //         console.log("Arquivo já carregado");
+    //         cont++;
+    //       }
+    //     }
+    //     //se ele verificar todos os arquivos e não encontrar o arquivo ele carrega
+    //     if (cont == 0) {
+    //       console.log("Arquivo: " + file.name);
+    //       await handleFile(file);
+    //     }
+    //   }else{
+    //     console.log("Arquivo: " + file.name);
+    //     await handleFile(file);
+    //   }
     }
-    calculaItens();
   }
 
   // Também tornamos possível clicar na área para selecionar um arquivo
@@ -110,14 +133,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.getElementById('run-python-btn').addEventListener('click', () => {
-    fetch('/run-python')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('output').innerText = data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('output').innerText = 'Error: ' + error;
-        });
-});
+// document.getElementById('run-python-btn').addEventListener('click', () => {
+//     fetch('/run-python')
+//         .then(response => response.text())
+//         .then(data => {
+//             document.getElementById('output').innerText = data;
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             document.getElementById('output').innerText = 'Error: ' + error;
+//         });
+// });
