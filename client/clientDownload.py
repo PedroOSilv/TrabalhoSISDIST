@@ -1,15 +1,8 @@
 import grpc
+import argparse
 import file_transfer_pb2
-import file_transfer_pb2_grpc
+import file_transfer_pb2_grpc   
 
-def upload_file(stub, file_path, filename):
-    def file_chunks():
-        with open(file_path, 'rb') as f:
-            while chunk := f.read(1024):
-                yield file_transfer_pb2.FileChunk(content=chunk, filename=filename)
-
-    response = stub.Upload(file_chunks())
-    print(f"Upload response: {response.message}")
 
 def download_file(stub, filename, download_path):
     request = file_transfer_pb2.FileRequest(filename=filename)
@@ -19,11 +12,15 @@ def download_file(stub, filename, download_path):
             f.write(chunk.content)
     print(f"File downloaded successfully to {download_path}")
 
-def run():
+def run(): 
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = file_transfer_pb2_grpc.FileTransferStub(channel)
-        upload_file(stub, 'textoSample.txt', 'uploaded_file.txt')
         download_file(stub, 'uploaded_file.txt', 'downloaded_file.txt')
 
 if __name__ == '__main__':
-    run()
+    parser = argparse.ArgumentParser(description='Client for uploading and downloading files via gRPC.')
+    parser.add_argument('file_path', type=str, help='The path to the file to be uploaded.')
+    parser.add_argument('filename', type=str, help='The name of the file to be uploaded.')
+
+    args = parser.parse_args()
+    run(args.file_path, args.filename, args.servers)
