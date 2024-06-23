@@ -25,17 +25,33 @@ const storage = multer.diskStorage({
 // Opções do multer
 const upload = multer({ storage: storage })
 
+//cria pasta uploads se não existir
+
+const uploadsDir = path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Servir arquivos estáticos da pasta 'web-app'
 app.use(express.static(path.join(__dirname, 'website')));
 
+// console.log("teste console");
+
 // Rota POST para lidar com o upload do arquivo
 app.post('/upload', upload.single('file'), (req, res) => {
+
+    console.log("entrou no upload");
+    console.log(req.file.originalname);
+
     if (req.file) {
         // Extrai o nome do arquivo
         const fileName = req.file.originalname;
+        console.log(`Arquivo recebido: ${fileName}`);
 
         // Constrói a string de comando com o nome do arquivo
         const command = `python3 client/clientUpload.py "uploads/${fileName}" "${fileName}"`;
+        //const command = "python3 script.py"
 
         // Executa o script Python com o nome do arquivo como parâmetro
         exec(command, (error, stdout, stderr) => {
@@ -55,13 +71,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 app.get('/run-python', (req, res) => {
-    // Extrai parâmetros da query string. Exemplo: /run-python?param1=value1&param2=value2
-    const params = Object.entries(req.query)
-                         .map(([key, value]) => `${key}=${value}`)
-                         .join(' ');
-
-    // Constrói a string de comando com os parâmetros
-    const command = `python3 script.py ${params}`;
 
     exec('python3 script.py', (error, stdout, stderr) => {
         if (error) {

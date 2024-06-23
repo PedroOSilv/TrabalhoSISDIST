@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Envia o arquivo via Fetch para o servidor
         fetch('/upload', {
             method: 'POST',
-            body: file
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('Erro ao enviar arquivo');
         });
 
+        await handleFile(file);
     //   if (keys.length >0 ){
     //     var cont = 0;
     //     for (const key of keys) {
@@ -133,14 +134,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// document.getElementById('run-python-btn').addEventListener('click', () => {
-//     fetch('/run-python')
-//         .then(response => response.text())
-//         .then(data => {
-//             document.getElementById('output').innerText = data;
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//             document.getElementById('output').innerText = 'Error: ' + error;
-//         });
-// });
+document.getElementById('run-python-btn').addEventListener('click', () => {
+    fetch('/run-python')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('output').innerText = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('output').innerText = 'Error: ' + error;
+        });
+});
