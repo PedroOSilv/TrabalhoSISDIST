@@ -4,6 +4,7 @@ import file_transfer_pb2_grpc
 from fastapi import FastAPI, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
+import json
 
 app = FastAPI()
 channel = grpc.insecure_channel("localhost:50051")
@@ -32,7 +33,7 @@ def upload_file_new(f, filename):
 def list_files(folder):
     request = file_transfer_pb2.ListRequest(folder=folder)
     response = stub.ListFiles(request)
-    return response.listOfFiles
+    return list(response.listOfFiles)
 
 
 def download_file(filename, download_path):
@@ -46,7 +47,6 @@ def download_file(filename, download_path):
 
 @app.get("/list-files")
 async def list_files_api():
-    print("Entrout")
     response = list_files("")
     return response
 
