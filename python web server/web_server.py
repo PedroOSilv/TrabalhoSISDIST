@@ -19,6 +19,7 @@ def upload_file(file_path, filename):
     response = stub.Upload(file_chunks())
     print(f"Upload response: {response.message}")
 
+
 def upload_file_new(f, filename):
     def file_chunks():
         while chunk := f.read(1024):
@@ -26,6 +27,7 @@ def upload_file_new(f, filename):
 
     response = stub.Upload(file_chunks())
     print(f"Upload response: {response.message}")
+
 
 def list_files(folder):
     request = file_transfer_pb2.ListRequest(folder=folder)
@@ -41,15 +43,17 @@ def download_file(filename, download_path):
             f.write(chunk.content)
     print(f"File downloaded successfully to {download_path}")
 
-app.mount("/", StaticFiles(directory="../website", html=True), name="website")
-
 
 @app.get("/list-files")
 async def list_files_api():
+    print("Entrout")
     response = list_files("")
-    return {"list_files": response}
+    return response
 
 
 @app.post("/upload")
 async def upload_api(file: UploadFile):
     upload_file_new(file, file.filename)
+
+
+app.mount("/", StaticFiles(directory="../website", html=True), name="website")
