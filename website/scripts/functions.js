@@ -1,7 +1,23 @@
 function deletarArquivo(nomeArquivo) {
     document.getElementById(nomeArquivo.getAttribute("value")).remove();
 
-    //requisição
+    //requisição para deletar o arquivo
+    fetch('/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Adicionando cabeçalho Content-Type
+        },
+        body: JSON.stringify({ filename: nomeArquivo.getAttribute("value") }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            openModalWithMessage("Arquivo deletado com sucesso!");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            openModalWithMessage("Erro ao deletar arquivo: "+ error);
+        });
 
 }
 

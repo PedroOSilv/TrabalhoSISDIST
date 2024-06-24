@@ -78,7 +78,7 @@ async def download_api(filename: str):
     return FileResponse(f"downloads/{filename}")
 
 
-@app.delete("/delete")
+@app.post("/delete")
 async def delete_file_api(fileRequest: FileRequest):
     delete_file(fileRequest.filename)
     return "Success"
