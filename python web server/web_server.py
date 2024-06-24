@@ -16,7 +16,7 @@ def upload_file(file_path, filename):
         with open(file_path, "rb") as f:
             while chunk := f.read(1024):
                 yield file_transfer_pb2.FileChunk(content=chunk, filename=filename)
-
+    
     response = stub.Upload(file_chunks())
     print(f"Upload response: {response.message}")
 
@@ -25,8 +25,11 @@ def upload_file_new(f, filename):
     def file_chunks():
         while chunk := f.read(1024):
             yield file_transfer_pb2.FileChunk(content=chunk, filename=filename)
+            print("entra")
 
+    print("before")
     response = stub.Upload(file_chunks())
+    print("Passou")
     print(f"Upload response: {response.message}")
 
 
@@ -52,8 +55,11 @@ async def list_files_api():
 
 
 @app.post("/upload")
-async def upload_api(file: UploadFile):
-    upload_file_new(file, file.filename)
+async def upload_api_new(file: UploadFile):
+    upload_file_new(file.file, file.filename)
+    # with open(f'uploads/{file.filename}', 'wb') as f:
+    #     f.write(file.file.read())
+    return "Success"
 
 
 app.mount("/", StaticFiles(directory="../website", html=True), name="website")
