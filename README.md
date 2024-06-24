@@ -5,7 +5,7 @@
 To install all the dependencies:
 
 ```bash
-pip install -r requirements.txt
+bash configFile.sh
 ```
 
 To start web server 
