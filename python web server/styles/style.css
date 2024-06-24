@@ -1,0 +1,71 @@
+center{
+    margin: auto;
+    padding-top: 10rem;
+}
+
+.logo{
+    width: 150px;
+}
+
+.sessao{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dee2e6;
+}
+
+.center{
+    margin: auto;
+    padding-top: 10rem;
+}
+
+@media (max-width: 700px) {
+    .form-class {
+       width: 100%;
+    }
+
+    .main-class{
+        margin-left: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+/* Estilos para telas com largura maior que 600px */
+@media (min-width: 701px) {
+    .form-class {
+
+        width: 70%;
+    }
+    .listagem{
+        width: 80%;
+    }
+
+    .mudar-senha{
+        width: 70%;
+    }
+
+    .main-class{
+        margin-left: 5rem;
+        margin-right: 5rem;
+    }
+}
+
+.text-login{
+    color:#ffd101;
+    text-shadow: 0px 0px 50px #000000;
+}
+
+#drop-area {
+    height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 200px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+}
+
+#drop-area.dragover {
+    background-color: #f0f0f0;
+}
