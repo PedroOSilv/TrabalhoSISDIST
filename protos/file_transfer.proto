@@ -6,6 +6,7 @@ service FileTransfer {
   rpc Upload (stream FileChunk) returns (UploadStatus);
   rpc Download (FileRequest) returns (stream FileChunk);
   rpc ListFiles (ListRequest) returns (ListOfFiles);
+  rpc Delete (FileRequest) returns (RemoveStatus);
 }
 
 message FileChunk {
@@ -26,6 +27,10 @@ message UploadStatus {
   string message = 2;
 }
 
+message RemoveStatus {
+  bool success = 1;
+}
+
 message ListOfFiles {
-  repeated string folderPath = 1;
+  repeated string listOfFiles = 1;
 }

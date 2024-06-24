@@ -3,19 +3,20 @@ import file_transfer_pb2
 import file_transfer_pb2_grpc
 from fastapi import FastAPI, UploadFile
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, FileResponse
-import json
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 app = FastAPI()
 channel = grpc.insecure_channel("localhost:50051")
 stub = file_transfer_pb2_grpc.FileTransferStub(channel)
+
 
 def upload_file(file_path, filename):
     def file_chunks():
         with open(file_path, "rb") as f:
             while chunk := f.read(1024):
                 yield file_transfer_pb2.FileChunk(content=chunk, filename=filename)
-    
+
     response = stub.Upload(file_chunks())
     print(f"Upload response: {response.message}")
 
@@ -47,6 +48,16 @@ def download_file(filename, download_path):
     print(f"File downloaded successfully to {download_path}")
 
 
+def delete_file(filename):
+    request = file_transfer_pb2.FileRequest(filename=filename)
+    response = stub.Delete(request)
+    print(f"Delete response: {response.success}")
+
+
+class FileRequest(BaseModel):
+    filename: str
+
+
 @app.get("/list-files")
 async def list_files_api():
     response = list_files("")
@@ -66,6 +77,11 @@ async def download_api(filename: str):
     download_file(filename, f"downloads/{filename}")
     return FileResponse(f"downloads/{filename}")
 
+
+@app.delete("/delete")
+async def delete_file_api(fileRequest: FileRequest):
+    delete_file(fileRequest.filename)
+    return "Success"
 
 
 app.mount("/", StaticFiles(directory="../website", html=True), name="website")

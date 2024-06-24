@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13\x66ile_transfer.proto\x12\x0c\x66iletransfer\".\n\tFileChunk\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\x0c\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\"\x1f\n\x0b\x46ileRequest\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\"\x1d\n\x0bListRequest\x12\x0e\n\x06\x66older\x18\x01 \x01(\t\"0\n\x0cUploadStatus\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\"\n\x0bListOfFiles\x12\x13\n\x0blistOfFiles\x18\x01 \x03(\t2\xd4\x01\n\x0c\x46ileTransfer\x12?\n\x06Upload\x12\x17.filetransfer.FileChunk\x1a\x1a.filetransfer.UploadStatus(\x01\x12@\n\x08\x44ownload\x12\x19.filetransfer.FileRequest\x1a\x17.filetransfer.FileChunk0\x01\x12\x41\n\tListFiles\x12\x19.filetransfer.ListRequest\x1a\x19.filetransfer.ListOfFilesb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13\x66ile_transfer.proto\x12\x0c\x66iletransfer\".\n\tFileChunk\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\x0c\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\"\x1f\n\x0b\x46ileRequest\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\"\x1d\n\x0bListRequest\x12\x0e\n\x06\x66older\x18\x01 \x01(\t\"0\n\x0cUploadStatus\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x1f\n\x0cRemoveStatus\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\"\n\x0bListOfFiles\x12\x13\n\x0blistOfFiles\x18\x01 \x03(\t2\x95\x02\n\x0c\x46ileTransfer\x12?\n\x06Upload\x12\x17.filetransfer.FileChunk\x1a\x1a.filetransfer.UploadStatus(\x01\x12@\n\x08\x44ownload\x12\x19.filetransfer.FileRequest\x1a\x17.filetransfer.FileChunk0\x01\x12\x41\n\tListFiles\x12\x19.filetransfer.ListRequest\x1a\x19.filetransfer.ListOfFiles\x12?\n\x06\x44\x65lete\x12\x19.filetransfer.FileRequest\x1a\x1a.filetransfer.RemoveStatusb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -29,8 +29,10 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_LISTREQUEST']._serialized_end=147
   _globals['_UPLOADSTATUS']._serialized_start=149
   _globals['_UPLOADSTATUS']._serialized_end=197
-  _globals['_LISTOFFILES']._serialized_start=199
-  _globals['_LISTOFFILES']._serialized_end=233
-  _globals['_FILETRANSFER']._serialized_start=236
-  _globals['_FILETRANSFER']._serialized_end=448
+  _globals['_REMOVESTATUS']._serialized_start=199
+  _globals['_REMOVESTATUS']._serialized_end=230
+  _globals['_LISTOFFILES']._serialized_start=232
+  _globals['_LISTOFFILES']._serialized_end=266
+  _globals['_FILETRANSFER']._serialized_start=269
+  _globals['_FILETRANSFER']._serialized_end=546
 # @@protoc_insertion_point(module_scope)

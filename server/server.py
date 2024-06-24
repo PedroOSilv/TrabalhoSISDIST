@@ -33,6 +33,11 @@ class FileTransferServicer(file_transfer_pb2_grpc.FileTransferServicer):
     def ListFiles(self, request, context):
         print(os.listdir(self.storage_path))
         return file_transfer_pb2.ListOfFiles(listOfFiles=os.listdir(self.storage_path))
+    
+    def Delete(self, request, context):
+        file_path = os.path.join(self.storage_path, request.filename)
+        os.remove(file_path)
+        return file_transfer_pb2.RemoveStatus(success=True)
 
 
 def serve():

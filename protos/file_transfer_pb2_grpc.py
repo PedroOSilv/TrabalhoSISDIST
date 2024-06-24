@@ -54,6 +54,11 @@ class FileTransferStub(object):
                 request_serializer=file__transfer__pb2.ListRequest.SerializeToString,
                 response_deserializer=file__transfer__pb2.ListOfFiles.FromString,
                 _registered_method=True)
+        self.Delete = channel.unary_unary(
+                '/filetransfer.FileTransfer/Delete',
+                request_serializer=file__transfer__pb2.FileRequest.SerializeToString,
+                response_deserializer=file__transfer__pb2.RemoveStatus.FromString,
+                _registered_method=True)
 
 
 class FileTransferServicer(object):
@@ -77,6 +82,12 @@ class FileTransferServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Delete(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_FileTransferServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -94,6 +105,11 @@ def add_FileTransferServicer_to_server(servicer, server):
                     servicer.ListFiles,
                     request_deserializer=file__transfer__pb2.ListRequest.FromString,
                     response_serializer=file__transfer__pb2.ListOfFiles.SerializeToString,
+            ),
+            'Delete': grpc.unary_unary_rpc_method_handler(
+                    servicer.Delete,
+                    request_deserializer=file__transfer__pb2.FileRequest.FromString,
+                    response_serializer=file__transfer__pb2.RemoveStatus.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -177,6 +193,33 @@ class FileTransfer(object):
             '/filetransfer.FileTransfer/ListFiles',
             file__transfer__pb2.ListRequest.SerializeToString,
             file__transfer__pb2.ListOfFiles.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Delete(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/filetransfer.FileTransfer/Delete',
+            file__transfer__pb2.FileRequest.SerializeToString,
+            file__transfer__pb2.RemoveStatus.FromString,
             options,
             channel_credentials,
             insecure,
