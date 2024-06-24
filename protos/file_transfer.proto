@@ -5,6 +5,7 @@ package filetransfer;
 service FileTransfer {
   rpc Upload (stream FileChunk) returns (UploadStatus);
   rpc Download (FileRequest) returns (stream FileChunk);
+  rpc ListFiles (ListRequest) returns (ListOfFiles);
 }
 
 message FileChunk {
@@ -16,7 +17,15 @@ message FileRequest {
   string filename = 1;
 }
 
+message ListRequest {
+  string folder = 1;
+}
+
 message UploadStatus {
   bool success = 1;
   string message = 2;
+}
+
+message ListOfFiles {
+  repeated string folderPath = 1;
 }
