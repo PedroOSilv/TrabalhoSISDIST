@@ -2,6 +2,7 @@ import grpc
 import file_transfer_pb2
 import file_transfer_pb2_grpc
 from fastapi import FastAPI, UploadFile
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
 
 app = FastAPI()
@@ -40,22 +41,7 @@ def download_file(filename, download_path):
             f.write(chunk.content)
     print(f"File downloaded successfully to {download_path}")
 
-
-
-@app.get("/", response_class=HTMLResponse)
-async def index():
-    with open("index.html") as f:
-        return f.read()
-
-
-@app.get("/styles/{path}")
-async def style_file(path):
-    return FileResponse(f"styles/{path}")
-
-
-@app.get("/scripts/{path}")
-async def script_file(path):
-    return FileResponse(f"scripts/{path}")
+app.mount("/", StaticFiles(directory="../website", html=True), name="website")
 
 
 @app.get("/list-files")
