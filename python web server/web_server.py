@@ -10,7 +10,6 @@ app = FastAPI()
 channel = grpc.insecure_channel("localhost:50051")
 stub = file_transfer_pb2_grpc.FileTransferStub(channel)
 
-
 def upload_file(file_path, filename):
     def file_chunks():
         with open(file_path, "rb") as f:
@@ -60,6 +59,13 @@ async def upload_api_new(file: UploadFile):
     # with open(f'uploads/{file.filename}', 'wb') as f:
     #     f.write(file.file.read())
     return "Success"
+
+@app.post("/download")
+async def download_api(filename: str):
+    print(f"Downloading file: {filename}")
+    download_file(filename, f"downloads/{filename}")
+    return FileResponse(f"downloads/{filename}")
+
 
 
 app.mount("/", StaticFiles(directory="../website", html=True), name="website")

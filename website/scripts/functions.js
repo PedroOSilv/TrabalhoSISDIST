@@ -1,6 +1,8 @@
 function deletarArquivo(nomeArquivo) {
     document.getElementById(nomeArquivo.getAttribute("value")).remove();
-    sessionStorage.removeItem(nomeArquivo.getAttribute("value"));
+
+    //requisição
+
 }
 
 function downloadFile(fileName) {
