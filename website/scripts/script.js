@@ -1,6 +1,54 @@
 
 console.log("Script carregado");
+console.log("Limpando session storage");
 sessionStorage.clear();
+
+listarArquivos();
+
+// Definir o intervalo de atualização para 5 segundos (5000 milissegundos)
+setInterval(listarArquivos, 5000);
+
+//atualizar lista de arquivos
+async function listarArquivos() {
+
+  console.log("Listando arquivos");
+
+  var tagFile = document.getElementById("files");
+  tagFile.innerHTML = "";
+
+  fetch('/list-files')
+        .then(response => response.text())
+        .then(data => {
+
+            var files = JSON.parse(data);
+
+            for (const file of files) {
+
+              tagFile.innerHTML +=
+                  `<span id="` +
+                  file +
+                  `" style="margin: 5px;" class="badge d-flex p-2 align-items-center bg-success rounded-pill">
+                <span class="px-1"> ` +
+                  file+
+                  ` </span>
+                <a style="color: aliceblue;" value="` +
+                  file+
+                  `" href="#" onclick="deletarArquivo(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-x-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                </svg>
+                </a>
+                </span>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('output').innerText = 'Error: ' + error;
+        });
+}
 
 async function handleFile(file) {
   var reader = new FileReader();
@@ -99,24 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         await handleFile(file);
-    //   if (keys.length >0 ){
-    //     var cont = 0;
-    //     for (const key of keys) {
-    //       if (file.name == key) {
-    //         openModalWithMessage("Arquivo já carregado");
-    //         console.log("Arquivo já carregado");
-    //         cont++;
-    //       }
-    //     }
-    //     //se ele verificar todos os arquivos e não encontrar o arquivo ele carrega
-    //     if (cont == 0) {
-    //       console.log("Arquivo: " + file.name);
-    //       await handleFile(file);
-    //     }
-    //   }else{
-    //     console.log("Arquivo: " + file.name);
-    //     await handleFile(file);
-    //   }
     }
   }
 
