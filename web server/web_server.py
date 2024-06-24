@@ -5,6 +5,7 @@ from fastapi import FastAPI, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import os
 
 app = FastAPI()
 channel = grpc.insecure_channel("localhost:50051")
@@ -27,9 +28,7 @@ def upload_file_new(f, filename):
             yield file_transfer_pb2.FileChunk(content=chunk, filename=filename)
             print("entra")
 
-    print("before")
     response = stub.Upload(file_chunks())
-    print("Passou")
     print(f"Upload response: {response.message}")
 
 
@@ -39,13 +38,14 @@ def list_files(folder):
     return list(response.listOfFiles)
 
 
-def download_file(filename, download_path):
+def download_file(filename):
     request = file_transfer_pb2.FileRequest(filename=filename)
     response = stub.Download(request)
-    with open(download_path, "wb") as f:
-        for chunk in response:
-            f.write(chunk.content)
-    print(f"File downloaded successfully to {download_path}")
+    for file_chunk in response:
+        file_path = os.path.join("downloads", file_chunk.filename)
+        with open(file_path, "ab") as f:
+            f.write(file_chunk.content)
+    print(f"{filename} file downloaded successfully to downloads")
 
 
 def delete_file(filename):
@@ -71,11 +71,12 @@ async def upload_api_new(file: UploadFile):
     #     f.write(file.file.read())
     return "Success"
 
+
 @app.post("/download")
-async def download_api(filename: str):
-    print(f"Downloading file: {filename}")
-    download_file(filename, f"downloads/{filename}")
-    return FileResponse(f"downloads/{filename}")
+async def download_api(fileRequest: FileRequest):
+    print(f"Downloading file: {fileRequest.filename}")
+    download_file(fileRequest.filename)
+    return FileResponse(f"downloads/{fileRequest.filename}")
 
 
 @app.post("/delete")
