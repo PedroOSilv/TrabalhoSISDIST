@@ -3,7 +3,27 @@ console.log("Script carregado");
 console.log("Limpando session storage");
 sessionStorage.clear();
 
+function initializeTooltips() {
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+}
+
+// Chame esta função após adicionar ou remover elementos que precisam de tooltips
+initializeTooltips();
+
+function handleDrop(event) {
+  unhighlight();
+  const files = event.dataTransfer.files;
+  handleFiles(files).then(() => {
+    // Reinicializa os tooltips após o processamento dos arquivos
+    initializeTooltips();
+  });
+}
+
 listarArquivos();
+
 
 // Definir o intervalo de atualização para 5 segundos (5000 milissegundos)
 setInterval(listarArquivos, 5000);
@@ -25,14 +45,16 @@ async function listarArquivos() {
       for (const file of files) {
 
         tagFile.innerHTML +=
-          `<span id="` +
+ 
+          `
+          <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Clique para baixar" id="` +
           file +
           `" style="margin: 5px;" class="badge d-flex p-2 align-items-center bg-success rounded-pill">
                 
-                <a style="color: aliceblue;" value="` +
+                <a  style="color: aliceblue; text-decoration: none;" value="` +
           file +
           `" href="#" onclick="downloadFile(this)">
-                  <span class="` + file + `"class="px-1"> ` +
+                  <span   class=" downloadBox"` + file + ` "class="px-1"> ` +
           file +
           ` </span> </a>
                 <a style="color: aliceblue;" value="` +
@@ -47,6 +69,14 @@ async function listarArquivos() {
                 </a>
                 </span>`;
       }
+      // Após adicionar todos os elementos, inicializa os tooltips
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+
+      addMouseoverToDownloadBoxes();
+      addMouseOutToDownloadBoxes();
     })
     .catch(error => {
       console.error('Error:', error);
@@ -66,6 +96,8 @@ async function handleFile(file) {
     listarArquivos();
   });
 }
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const dropArea = document.getElementById("drop-area");
@@ -120,14 +152,18 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(data => {
           console.log('Resposta do servidor:', data);
-          alert('Arquivo enviado com sucesso!');
+          
+          openModalWithMessage('Arquivo enviado com sucesso!');
         })
         .catch(error => {
           console.error('Erro:', error);
-          alert('Erro ao enviar arquivo');
+          openModalWithMessage('Erro ao enviar arquivo');
         });
 
       await handleFile(file);
+
+      // Após atualizar o DOM, reinicialize os tooltips
+      initializeTooltips();
     }
   }
 
@@ -144,3 +180,21 @@ document.addEventListener("DOMContentLoaded", function () {
       handleFiles(files);
     });
 });
+
+function addMouseoverToDownloadBoxes() {
+  const fileBoxes = document.getElementsByClassName("downloadBox");
+  for (const fileBox of fileBoxes) {
+    fileBox.addEventListener("mouseover", function () {
+      this.style.fontSize = "16px";
+    });
+  }
+}
+
+function addMouseOutToDownloadBoxes() {
+  const fileBoxes = document.getElementsByClassName("downloadBox");
+  for (const fileBox of fileBoxes) {
+    fileBox.addEventListener("mouseout", function () {
+      this.style.fontSize = "10px";
+    });
+  }
+}
