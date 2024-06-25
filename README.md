@@ -48,6 +48,15 @@ fastapi dev web_server.py
 
 Congrats, the UFile System is running on http://localhost:8000!
 
+To run in your local network in a different port you can use:
+
+```bash
+uvicorn web_server:app --host 0.0.0.0 --port 8081
+```
+
+for the port 8081 for example
+obs: don't forget to allow the port on the local firewall of the os
+
 ## Repository organization
 
 This repository is organized in this way:
